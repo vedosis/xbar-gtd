@@ -7,10 +7,21 @@ import (
 
 var colorMap = map[string][]string{
 	// colorName: [lightMode, darkMode]
-	"red": {"darkred", "crimson"},
+	"red":       {"crimson", "darkred"},
+	"primary":   {"#000000", "#FFFFFF"},
+	"secondary": {"#FF6666", "#333030"},
 }
 
 var IsDarkMode bool
+
+func init() {
+	cmd := exec.Command("defaults", "read", "-g", "AppleInterfaceStyle")
+	if value, err := cmd.Output(); err == nil {
+		IsDarkMode = strings.Contains(strings.ToLower(string(value)), "dark")
+		return
+	}
+	IsDarkMode = false
+}
 
 func Color(color string) string {
 	value, ok := colorMap[color]
@@ -22,12 +33,4 @@ func Color(color string) string {
 	} else {
 		return value[0]
 	}
-}
-
-func init() {
-	cmd := exec.Command("defaults", "read", "-g", "AppleInterfaceStyle")
-	if value, err := cmd.Output(); err == nil {
-		IsDarkMode = strings.Contains(strings.ToLower(string(value)), "dark")
-	}
-	IsDarkMode = false
 }

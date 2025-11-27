@@ -12,7 +12,7 @@ import (
 
 type PRConfigs struct {
 	GithubCLIBinPath string `yaml:"github_cli"`
-	NerdFontName     string `yaml:"nerd_font"`
+	FontName         string `yaml:"nerd_font"`
 }
 
 func NewPRConfigs() *PRConfigs {
@@ -24,15 +24,21 @@ func CLI() {
 
 	env, messages := environmentSetup()
 	if messages != nil && len(messages) > 0 {
-		renderer.
-			SetTitle("PRs").
-			SetIcon("⚠️").
-			Output(linesToInterfaces(messages)...)
+		renderError(renderer, messages...)
 		return
 	}
 	renderer.SetFont(env.FontName)
 
-	myPRs := env.GithubClient.getMyPRs()
+	myPRs, err := env.GithubClient.GetMyPRs()
+	if err != nil {
+		renderError(renderer,
+			xbar.NewXBarLine("Error fetching PRs", xbar.WithColor("red")),
+			xbar.NewXBarDebugError("Error fetching PRs", err),
+		)
+		return
+	}
+
+	renderer.SetTitle(fmt.Sprintf("PRs (%d)", len(myPRs)))
 
 	renderer.SetTitle("\uF408 (0,0)")
 	renderer.Output(
@@ -47,7 +53,7 @@ func CLI() {
 			),
 		),
 		xbar.NewXBarLine("Test!"),
-		xbar.NewXBarLine(fmt.Sprintf("FONT: %s", fontName)),
+		xbar.NewXBarLine(fmt.Sprintf("FONT: %s", env.FontName)),
 	)
 }
 
@@ -76,6 +82,7 @@ func environmentSetup() (*Environment, []*xbar.XBarLine) {
 						xbar.OpenInTerminal("brew install gh")...,
 					),
 				),
+				xbar.NewXBarDebugError("error finding gh cli", err),
 			}
 		}
 		config.GithubCLIBinPath = ghCli.BinPath
@@ -91,14 +98,14 @@ func environmentSetup() (*Environment, []*xbar.XBarLine) {
 			xbar.NewXBarLine("Make sure you're logged in"),
 			xbar.NewXBarLine("Run 'gh auth login' to log in", xbar.WithCommand(
 				xbar.OpenInTerminal("gh auth login -w -h github.com -p https")...)),
-			xbar.NewXBarLine("error details", xbar.WithChildren()),
+			xbar.NewXBarDebugError("error fetching auth tokens", err),
 		}
 	}
 
 	ghClient := clients.NewGithubClient(auth)
 	env.GithubClient = ghClient
 
-	font := config.NerdFontName
+	font := config.FontName
 	if font == "" {
 		fcListBinPath := utils.FindBin("fc-list")
 		if fcListBinPath == "" {
@@ -118,7 +125,7 @@ func environmentSetup() (*Environment, []*xbar.XBarLine) {
 				xbar.NewXBarLine("Click here to open font selection.", xbar.WithHref("https://www.nerdfonts.com/font-downloads")),
 			}
 		}
-		config.NerdFontName = font
+		config.FontName = font
 		shouldWriteConfig = true
 	}
 	env.FontName = font
@@ -155,10 +162,14 @@ func findFontFromList(cmd *exec.Cmd) string {
 	return result
 }
 
-func linesToInterfaces(l []*xbar.XBarLine) []interface{} {
-	result := make([]interface{}, len(l))
-	for i, line := range l {
-		result[i] = line
+func renderError(renderer *xbar.XBarRenderer, lines ...*xbar.XBarLine) {
+	rLines := make([]interface{}, len(lines))
+	for i, line := range lines {
+		rLines[i] = line
 	}
-	return result
+
+	renderer.
+		SetTitle("PRs").
+		SetIcon("⚠️").
+		Output(rLines...)
 }

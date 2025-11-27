@@ -11,7 +11,7 @@ type GithubCLI struct {
 }
 
 type GithubAuthStatus struct {
-	Hosts map[string]GithubAuthStatusHost `json:"hosts"`
+	Hosts map[string][]GithubAuthStatusHost `json:"hosts"`
 }
 
 type GithubAuthStatusHost struct {
@@ -68,8 +68,20 @@ func (c *GithubCLI) GetUserAndToken(hostname string) (*GithubAuth, error) {
 		return auth, fmt.Errorf("host %s not found in gh cli output", hostname)
 	}
 
-	auth.Token = hostStatus.Token
-	auth.Username = hostStatus.Login
+	var foundHost GithubAuthStatusHost
+	for _, host := range hostStatus {
+		if host.Active && host.GitProtocol == "https" {
+			foundHost = host
+			break
+		}
+	}
+
+	if foundHost.Token == "" {
+		return auth, fmt.Errorf("no active https host found for %s", hostname)
+	}
+
+	auth.Token = foundHost.Token
+	auth.Username = foundHost.Login
 
 	return auth, nil
 }

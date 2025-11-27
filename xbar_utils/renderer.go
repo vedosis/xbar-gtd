@@ -3,6 +3,7 @@ package xbar_utils
 import (
 	"fmt"
 	"strings"
+	"xbar/utils"
 )
 
 type XBarRenderer struct {
@@ -45,7 +46,15 @@ func (r *XBarRenderer) Output(o ...interface{}) {
 		case string:
 			fmt.Println(prefix + v)
 		case *XBarLine:
-			fmt.Println(prefix + r.RenderLine(v))
+			var lines []string
+			if v.wrapTextLength == 0 {
+				lines = []string{v.message}
+			} else {
+				lines = utils.WrapLines(v.message, v.wrapTextLength)
+			}
+			for _, sentence := range lines {
+				fmt.Println(prefix + r.RenderLine(v.Clone(sentence)))
+			}
 			if len(v.children) > 0 {
 				r.sectionDepth += 1
 				r.Output(v.ChildrenAsInterfaces()...)

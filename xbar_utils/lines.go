@@ -1,20 +1,22 @@
 package xbar_utils
 
 import (
+	"fmt"
 	"xbar/utils"
 )
 
 type XBarLine struct {
-	message   string
-	command   *XBarLineCommand
-	href      string
-	color     string
-	fontName  string
-	fontSize  int
-	maxLength int    // Truncates string with '...'
-	image     string // Base64 encoded
-	disabled  bool
-	children  []*XBarLine
+	message        string
+	command        *XBarLineCommand
+	href           string
+	color          string
+	fontName       string
+	fontSize       int
+	maxLength      int    // Truncates string with '...'
+	image          string // Base64 encoded
+	disabled       bool
+	children       []*XBarLine
+	wrapTextLength uint16
 }
 
 type XBarLineCommand struct {
@@ -32,6 +34,18 @@ func NewXBarLine(message string, opts ...XBarLineOption) *XBarLine {
 		o(&defaultObj)
 	}
 	return &defaultObj
+}
+
+func NewXBarDebugError(message string, err error) *XBarLine {
+	return NewXBarLine("error details",
+		WithColor("secondary"),
+		WithChildren(
+			NewXBarLine(
+				fmt.Sprintf("%s: %s", message, err.Error()),
+				WithWrapTextLength(64),
+				WithColor("primary"),
+			),
+		))
 }
 
 func (l *XBarLine) Clone(message string, opts ...XBarLineOption) *XBarLine {
@@ -98,6 +112,11 @@ func WithImage(image string) XBarLineOption {
 func WithDisabled() XBarLineOption {
 	return func(line *XBarLine) {
 		line.disabled = true
+	}
+}
+func WithWrapTextLength(length uint16) XBarLineOption {
+	return func(line *XBarLine) {
+		line.wrapTextLength = length
 	}
 }
 
