@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+	"time"
 	"xbar/clients"
 	"xbar/utils"
 	xbar "xbar/xbar_utils"
@@ -13,10 +14,17 @@ import (
 type PRConfigs struct {
 	GithubCLIBinPath string `yaml:"github_cli"`
 	FontName         string `yaml:"nerd_font"`
+	OldPRDays        int    `yaml:"old_pr_days"`
+	GithubHostname   string `yaml:"github_hostname"`
+	AddIconSpace     bool   `yaml:"add_icon_space"`
 }
 
 func NewPRConfigs() *PRConfigs {
-	return &PRConfigs{}
+	return &PRConfigs{
+		OldPRDays:      7,
+		GithubHostname: "github.com",
+		AddIconSpace:   false,
+	}
 }
 
 func CLI() {
@@ -29,7 +37,7 @@ func CLI() {
 	}
 	renderer.SetFont(env.FontName)
 
-	myPRs, err := env.GithubClient.GetMyPRs()
+	prList, err := env.GithubClient.GetMyPRs()
 	if err != nil {
 		renderError(renderer,
 			xbar.NewXBarLine("Error fetching PRs", xbar.WithColor("red")),
@@ -38,28 +46,32 @@ func CLI() {
 		return
 	}
 
-	renderer.SetTitle(fmt.Sprintf("PRs (%d)", len(myPRs)))
+	// Set header title with counts
+	renderer.SetTitle(fmt.Sprintf("%s(%d,%d,%d)", IconPlugin, len(prList.MyPRs), len(prList.ReviewRequests), len(prList.Assigned)))
 
-	renderer.SetTitle("\uF408 (0,0)")
-	renderer.Output(
-		xbar.NewXBarLine("My Open PRs",
-			xbar.WithChildren(
-				xbar.NewXBarLine("Things!!"),
-				xbar.NewXBarLine("Things!!"),
-				xbar.NewXBarLine("Things!!"),
-				xbar.NewXBarLine("Things!!"),
-				xbar.NewXBarLine("Things!!"),
-				xbar.NewXBarLine("Stuff", xbar.WithChildren(xbar.NewXBarLine("Things!!"))),
-			),
-		),
-		xbar.NewXBarLine("Test!"),
-		xbar.NewXBarLine(fmt.Sprintf("FONT: %s", env.FontName)),
-	)
+	// Render PR lists
+	prLines := RenderPRList(prList, env)
+	if len(prLines) == 0 {
+		renderer.SetTitle(IconPlugin)
+		renderer.Output(
+			xbar.NewXBarLine("No PRs to display"),
+			xbar.NewXBarLine(fmt.Sprintf("Last updated: %s", time.Now().Format(time.RFC3339))),
+		)
+		return
+	}
+
+	// Convert to interface{} for renderer
+	outputLines := make([]interface{}, len(prLines))
+	for i, line := range prLines {
+		outputLines[i] = line
+	}
+	renderer.Output(outputLines...)
 }
 
 type Environment struct {
 	GithubClient *clients.GithubClient
 	FontName     string
+	AddIconSpace bool
 }
 
 func environmentSetup() (*Environment, []*xbar.XBarLine) {
@@ -70,6 +82,10 @@ func environmentSetup() (*Environment, []*xbar.XBarLine) {
 
 	shouldWriteConfig := false
 	config, err := utils.GetConfig[PRConfigs]("prs", NewPRConfigs)
+
+	if err != nil {
+		env.AddIconSpace = config.AddIconSpace
+	}
 
 	if err != nil || config.GithubCLIBinPath == "" {
 		ghCli, err = clients.FindGithubCLI()
@@ -103,6 +119,8 @@ func environmentSetup() (*Environment, []*xbar.XBarLine) {
 	}
 
 	ghClient := clients.NewGithubClient(auth)
+	ghClient.SetHostname(config.GithubHostname)
+	ghClient.SetOldDays(config.OldPRDays)
 	env.GithubClient = ghClient
 
 	font := config.FontName

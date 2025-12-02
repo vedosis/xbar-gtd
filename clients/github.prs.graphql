@@ -1,0 +1,70 @@
+query {
+    myPRs: search(query: "type:pr state:open author:{{.User}} archived:false is:open", type: ISSUE, first: 50) {
+        edges {
+            node {
+                ... on PullRequest {
+                    number
+                    title
+                    url
+                    createdAt
+                    updatedAt
+                    isDraft
+                    author { login }
+                    repository {
+                        owner { login }
+                        name
+                        url
+                    }
+                    reviewDecision
+                    comments(first: 1) { totalCount }
+                    reviews(first: 1, states: [CHANGES_REQUESTED, APPROVED]) { totalCount }
+                }
+            }
+        }
+    }
+    reviewRequests: search(query: "type:pr state:open review-requested:{{ .User }} archived:false", type: ISSUE, first: 50) {
+        edges {
+            node {
+                ... on PullRequest {
+                    number
+                    title
+                    url
+                    createdAt
+                    updatedAt
+                    isDraft
+                    author { login }
+                    repository {
+                        owner { login }
+                        name
+                        url
+                    }
+                    reviewDecision comments(first: 1) { totalCount }
+                    reviews(first: 1, states: [CHANGES_REQUESTED, APPROVED]) { totalCount }
+                }
+            }
+        }
+    }
+    assigned: search(query: "type:pr state:open assignee:{{ .User }} archived:false", type: ISSUE, first: 50) {
+        edges {
+            node {
+                ... on PullRequest {
+                    number
+                    title
+                    url
+                    createdAt
+                    updatedAt
+                    isDraft
+                    author { login }
+                    repository {
+                        owner { login }
+                        name
+                        url
+                    }
+                    reviewDecision
+                    comments(first: 1) { totalCount }
+                    reviews(first: 1, states: [CHANGES_REQUESTED, APPROVED]) { totalCount }
+                }
+            }
+        }
+    }
+}

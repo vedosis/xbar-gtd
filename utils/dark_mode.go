@@ -8,8 +8,10 @@ import (
 var colorMap = map[string][]string{
 	// colorName: [lightMode, darkMode]
 	"red":       {"crimson", "darkred"},
-	"primary":   {"#000000", "#FFFFFF"},
+	"primary":   {"#003000", "#FFF0FF"},
 	"secondary": {"#FF6666", "#333030"},
+	"warning":   {"#FF9500", "#FF9500"},
+	"danger":    {"#FF3B30", "#FF453A"},
 }
 
 var IsDarkMode bool

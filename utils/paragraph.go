@@ -26,6 +26,7 @@ func WrapLines(s string, maxLength uint16) []string {
 				for wordLength > maxLength {
 					result = append(result, word[:maxLength])
 					word = word[maxLength:]
+					wordLength -= maxLength
 				}
 
 				if wordLength > 0 {
