@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
 var FILENAME = ".config.%s.%s"
+var getWorkingDir = os.Getwd
 
 func GetConfig[ConfigType any](name string, defaultFn func() *ConfigType) (*ConfigType, error) {
 	var config = defaultFn()
@@ -21,7 +21,7 @@ func GetConfig[ConfigType any](name string, defaultFn func() *ConfigType) (*Conf
 	var err error
 	var foundFile string
 
-	wd, _ := os.Getwd()
+	wd, _ := getWorkingDir()
 
 	for idx, ext := range extensions {
 		filename := fmt.Sprintf(FILENAME, name, ext)
@@ -37,7 +37,7 @@ func GetConfig[ConfigType any](name string, defaultFn func() *ConfigType) (*Conf
 	}
 
 	if data == nil || len(data) == 0 {
-		return config, fmt.Errorf("config file not found or only empty files found, searched at (%s)", strings.Join(searchedFor, " | "))
+		return config, nil
 	}
 
 	if err = yaml.Unmarshal(data, &config); err != nil {
@@ -52,7 +52,7 @@ func WriteConfig[ConfigType any](name string, config ConfigType) error {
 	if err != nil {
 		return fmt.Errorf("failed to marshal config file (%s): %w", name, err)
 	}
-	wd, _ := os.Getwd()
+	wd, _ := getWorkingDir()
 	filename := filepath.Join(wd, fmt.Sprintf(FILENAME, name, "yaml"))
 	return os.WriteFile(filename, data, 0600)
 }

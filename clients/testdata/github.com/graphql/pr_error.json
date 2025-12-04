@@ -1,0 +1,14 @@
+{
+  "data": {},
+  "errors": [
+    {
+      "message": "Could not resolve to a PullRequest with the number of '123'.",
+      "type": "NOT_FOUND",
+      "path": [
+        "repository",
+        "pullRequest",
+        "node"
+      ]
+    }
+  ]
+}

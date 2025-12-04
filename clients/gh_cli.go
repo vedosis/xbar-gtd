@@ -4,10 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"xbar/utils"
 )
 
+type Command interface {
+	Output() ([]byte, error)
+}
+
 type GithubCLI struct {
-	BinPath string
+	binPath       string
+	execCommandFn func(string, ...string) Command
+}
+
+func (c *GithubCLI) BinPath() string {
+	return c.binPath
 }
 
 type GithubAuthStatus struct {
@@ -30,23 +40,33 @@ type GithubAuth struct {
 	Token    string
 }
 
+var findBin = utils.FindBin
+
+func defaultExecCommand(command string, args ...string) Command {
+	return exec.Command(command, args...)
+}
+
 func NewGithubCLIClient(binPath string) *GithubCLI {
-	return &GithubCLI{BinPath: binPath}
+	client := &GithubCLI{
+		binPath:       binPath,
+		execCommandFn: defaultExecCommand,
+	}
+	return client
 }
 
 func FindGithubCLI() (*GithubCLI, error) {
-	binPath, err := exec.LookPath("gh")
-	if err != nil {
-		return nil, fmt.Errorf("could not find gh: %w", err)
+	binPath := findBin("gh")
+	if binPath != "" {
+		return NewGithubCLIClient(binPath), nil
 	}
-	return &GithubCLI{BinPath: binPath}, nil
+	return &GithubCLI{binPath: binPath}, fmt.Errorf("could not find gh cli in any known locations")
 }
 
 func (c *GithubCLI) GetUserAndToken(hostname string) (*GithubAuth, error) {
 	var err error
 	var auth = &GithubAuth{}
-	cmd := exec.Command(
-		c.BinPath,
+	cmd := c.execCommandFn(
+		c.BinPath(),
 		"auth",
 		"status",
 		"--hostname", "github.com",

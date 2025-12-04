@@ -12,6 +12,7 @@ const (
 	IconStale            = "\uf43a" // nf-oct-clock
 	IconDraft            = "\uf4dd" // nf-oct-git_pull_request_draft
 	IconAssigned         = "\uf415" // nf-oct-person
+	IconWarning          = "⚠️"
 )
 
 func GetPRStatusIcon(pr *clients.PullRequestMeta) string {

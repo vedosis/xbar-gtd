@@ -1,0 +1,16 @@
+{
+  "hosts": {
+    "github.com": [
+      {
+        "state": "success",
+        "active": true,
+        "host": "github.com",
+        "login": "testy-mc-testy-pants",
+        "tokenSource": "keyring",
+        "token": "",
+        "scopes": "gist, read:org, repo, workflow",
+        "gitProtocol": "https"
+      }
+    ]
+  }
+}

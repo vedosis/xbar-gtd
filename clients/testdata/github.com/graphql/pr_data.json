@@ -1,0 +1,260 @@
+{
+  "data": {
+    "myPRs": {
+      "edges": [
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Mine 1",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Mine 2",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        }
+      ]
+    },
+    "reviewRequests": {
+      "edges": [
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Review Requested 1",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Review Requested 2",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Review Requested 3",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        }
+      ]
+    },
+    "assigned": {
+      "edges": [
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Assigned 1",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Assigned 2",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Assigned 3",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "node": {
+            "number": 123,
+            "title": "Test PR Assigned 4 - This one is old!",
+            "url": "https://github.com/test/repo/pull/123",
+            "createdAt": "2025-11-01T00:00:00Z",
+            "updatedAt": "2025-11-25T00:00:00Z",
+            "isDraft": false,
+            "author": {
+              "login": "testuser"
+            },
+            "repository": {
+              "owner": {
+                "login": "test"
+              },
+              "name": "repo",
+              "url": "https://github.com/test/repo"
+            },
+            "reviewDecision": "APPROVED",
+            "comments": {
+              "totalCount": 0
+            },
+            "reviews": {
+              "totalCount": 1
+            }
+          }
+        }
+      ]
+    }
+  },
+  "errors": []
+}

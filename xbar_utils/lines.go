@@ -61,12 +61,6 @@ func (l *XBarLine) Clone(message string, opts ...XBarLineOption) *XBarLine {
 	return &values
 }
 
-func WithMessage(message string) XBarLineOption {
-	return func(line *XBarLine) {
-		line.message = message
-	}
-}
-
 func WithHref(href string) XBarLineOption {
 	return func(line *XBarLine) {
 		line.href = href
@@ -132,4 +126,23 @@ func (l *XBarLine) ChildrenAsInterfaces() []interface{} {
 		result[i] = child
 	}
 	return result
+}
+
+type XBarHeader struct {
+	title       string
+	icon        string
+	image       string
+	hasRendered bool
+}
+
+func NewXBarHeader(title string) *XBarHeader {
+	return NewXBarHeaderWithIcon(title, "")
+}
+
+func NewXBarHeaderWithIcon(title string, icon string) *XBarHeader {
+	return &XBarHeader{
+		title:       title,
+		icon:        icon,
+		hasRendered: false,
+	}
 }

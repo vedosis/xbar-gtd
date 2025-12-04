@@ -2,6 +2,7 @@ package xbar_utils
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"xbar/utils"
 )
@@ -10,29 +11,54 @@ type XBarRenderer struct {
 	header       *XBarHeader
 	font         string
 	sectionDepth uint8
+	cmdPrintFn   func(...any) (int, error)
+	cmdPrintLnFn func(...any) (int, error)
 }
 
-func NewXBarRenderer() *XBarRenderer {
-	return &XBarRenderer{
-		header: NewXBarHeader("No Title"),
+type XBarRendererOption func(*XBarRenderer)
+
+func NewXBarRenderer(opts ...XBarRendererOption) *XBarRenderer {
+	renderer := &XBarRenderer{
+		header:       NewXBarHeader("No Title"),
+		cmdPrintFn:   fmt.Print,
+		cmdPrintLnFn: fmt.Println,
+	}
+
+	for _, opt := range opts {
+		opt(renderer)
+	}
+
+	return renderer
+}
+
+func WithCmdPrintFn(fn func(...any) (int, error)) XBarRendererOption {
+	return func(r *XBarRenderer) {
+		r.cmdPrintFn = fn
+	}
+}
+
+func WithCmdPrintLnFn(fn func(...any) (int, error)) XBarRendererOption {
+	return func(r *XBarRenderer) {
+		r.cmdPrintLnFn = fn
 	}
 }
 
 func (r *XBarRenderer) Output(o ...interface{}) {
+	os.Stdout.Sync()
 	if !r.header.hasRendered {
 		if r.header.icon != "" {
-			fmt.Print(fmt.Sprintf("%s  ", r.header.icon))
+			r.cmdPrintFn(fmt.Sprintf("%s  ", r.header.icon))
 		}
-		fmt.Print(r.header.title)
+		r.cmdPrintFn(r.header.title)
 		if r.header.image != "" {
-			fmt.Print(fmt.Sprintf(" | icon=data:image/png;base64,%s", r.header.image))
+			r.cmdPrintFn(fmt.Sprintf(" | icon=data:image/png;base64,%s", r.header.image))
 		}
 		if r.font != "" {
-			fmt.Print(fmt.Sprintf(" | font='%s'", r.font))
+			r.cmdPrintFn(fmt.Sprintf(" | font='%s'", r.font))
 		}
-		fmt.Println()
+		r.cmdPrintLnFn()
 		r.header.hasRendered = true
-		fmt.Println("---")
+		r.cmdPrintLnFn("---")
 	}
 
 	prefix := ""
@@ -44,7 +70,7 @@ func (r *XBarRenderer) Output(o ...interface{}) {
 	for _, line := range o {
 		switch v := line.(type) {
 		case string:
-			fmt.Println(prefix + v)
+			r.cmdPrintLnFn(prefix + v)
 		case *XBarLine:
 			var lines []string
 			if v.wrapTextLength == 0 {
@@ -53,7 +79,7 @@ func (r *XBarRenderer) Output(o ...interface{}) {
 				lines = utils.WrapLines(v.message, v.wrapTextLength)
 			}
 			for _, sentence := range lines {
-				fmt.Println(prefix + r.RenderLine(v.Clone(sentence)))
+				r.cmdPrintLnFn(prefix + r.RenderLine(v.Clone(sentence)))
 			}
 			if len(v.children) > 0 {
 				r.sectionDepth += 1
@@ -61,7 +87,7 @@ func (r *XBarRenderer) Output(o ...interface{}) {
 				r.sectionDepth -= 1
 			}
 		default:
-			fmt.Println(fmt.Sprintf("unknown object, %s", v))
+			r.cmdPrintLnFn(fmt.Sprintf("unknown object, %s", v))
 		}
 	}
 }
@@ -83,9 +109,6 @@ func (r *XBarRenderer) RenderLine(line *XBarLine) string {
 	if line.href != "" {
 		rVal += fmt.Sprintf(" | href=%s", line.href)
 	}
-	if line.fontName != "" {
-		rVal += fmt.Sprintf(" | font=%s", line.fontName)
-	}
 	if line.fontSize != 0 {
 		rVal += fmt.Sprintf(" | size=%d", line.fontSize)
 	}
@@ -106,6 +129,22 @@ func (r *XBarRenderer) RenderLine(line *XBarLine) string {
 	return rVal
 }
 
-func (r *XBarRenderer) SetFont(font string) {
+func (r *XBarRenderer) SetFont(font string) *XBarRenderer {
 	r.font = font
+	return r
+}
+
+func (r *XBarRenderer) SetTitle(title string) *XBarRenderer {
+	r.header.title = title
+	return r
+}
+
+func (r *XBarRenderer) SetIcon(icon string) *XBarRenderer {
+	r.header.icon = icon
+	return r
+}
+
+func (r *XBarRenderer) SetHeaderImage(image string) *XBarRenderer {
+	r.header.image = image
+	return r
 }

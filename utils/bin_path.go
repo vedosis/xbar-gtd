@@ -13,14 +13,16 @@ var locations = []string{
 	"/usr/sbin",
 }
 
+var lookPathCmd = exec.LookPath
+
 func FindBin(s string) string {
-	if p, err := exec.LookPath(s); err == nil {
-		return p
+	if p1, err := lookPathCmd(s); err == nil {
+		return p1
 	}
-	for _, p := range locations {
-		p, err := exec.LookPath(path.Join(p, s))
+	for _, p2 := range locations {
+		p3, err := lookPathCmd(path.Join(p2, s))
 		if err == nil {
-			return p
+			return p3
 		}
 	}
 	return ""

@@ -70,7 +70,9 @@ func RenderPR(pr *clients.PullRequestMeta, env *Environment) *xbar.XBarLine {
 	for _, icon := range icons {
 		iconString += icon + " "
 	}
-
+	if env.AddIconSpace {
+		iconString += " "
+	}
 	// icons owner/repo #123: Title
 	text := fmt.Sprintf(
 		"%s%s/%s #%d: %s",
@@ -83,10 +85,6 @@ func RenderPR(pr *clients.PullRequestMeta, env *Environment) *xbar.XBarLine {
 
 	// Add metadata as children (only age info if old)
 	children := []*xbar.XBarLine{}
-
-	if env.AddIconSpace {
-		iconString += " "
-	}
 
 	ageColor := "primary"
 	// Age info for old PRs
