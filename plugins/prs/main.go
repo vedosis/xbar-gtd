@@ -3,7 +3,7 @@ package prs
 import (
 	"fmt"
 	"os"
-	"xbar/clients"
+	"xbar/pkg/clients"
 )
 
 /**

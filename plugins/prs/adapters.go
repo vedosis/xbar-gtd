@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
-	"xbar/utils"
-	xbar "xbar/xbar_utils"
+	"xbar/pkg/utils"
+	"xbar/pkg/xbar"
 )
 
 type PRConfigs struct {

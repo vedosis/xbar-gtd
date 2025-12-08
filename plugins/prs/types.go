@@ -1,6 +1,8 @@
 package prs
 
-import "xbar/clients"
+import (
+	"xbar/pkg/clients"
+)
 
 type GithubClientInterface interface {
 	GetMyPRs() (*clients.PRList, error)

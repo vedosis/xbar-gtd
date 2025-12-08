@@ -1,10 +1,10 @@
-package xbar_utils
+package xbar
 
 import (
 	"fmt"
 	"os"
 	"strings"
-	"xbar/utils"
+	"xbar/pkg/utils"
 )
 
 type XBarRenderer struct {

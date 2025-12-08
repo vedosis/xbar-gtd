@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 	"strings"
-	"xbar/prs"
+	"xbar/plugins/prs"
 )
 
 type CliFunction = func()

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
-	"xbar/utils"
+	"xbar/pkg/utils"
 )
 
 type Command interface {

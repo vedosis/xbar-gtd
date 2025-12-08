@@ -1,8 +1,8 @@
-package xbar_utils
+package xbar
 
 import (
 	"fmt"
-	"xbar/utils"
+	"xbar/pkg/utils"
 )
 
 type XBarLine struct {

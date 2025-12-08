@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 	"testing"
-	"xbar/utils"
+	"xbar/pkg/utils"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

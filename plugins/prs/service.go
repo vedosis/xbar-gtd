@@ -3,8 +3,8 @@ package prs
 import (
 	"fmt"
 	"time"
-	"xbar/clients"
-	xbar "xbar/xbar_utils"
+	"xbar/pkg/clients"
+	"xbar/pkg/xbar"
 )
 
 // PRService handles all PR-related operations

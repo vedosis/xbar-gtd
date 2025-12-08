@@ -1,6 +1,8 @@
 package prs
 
-import "xbar/clients"
+import (
+	"xbar/pkg/clients"
+)
 
 const (
 	IconPlugin           = "\uf408" // nf-cod-github_alt

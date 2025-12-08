@@ -1,4 +1,4 @@
-package xbar_utils
+package xbar
 
 import (
 	"fmt"

@@ -2,9 +2,9 @@ package prs
 
 import (
 	"fmt"
-	"xbar/clients"
-	"xbar/utils"
-	xbar "xbar/xbar_utils"
+	"xbar/pkg/clients"
+	"xbar/pkg/utils"
+	"xbar/pkg/xbar"
 )
 
 func RenderPRList(prList *clients.PRList, env *Environment) []*xbar.XBarLine {

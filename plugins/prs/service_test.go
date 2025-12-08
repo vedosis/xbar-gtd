@@ -3,8 +3,8 @@ package prs
 import (
 	"fmt"
 	"testing"
-	"xbar/clients"
-	"xbar/xbar_utils"
+	"xbar/pkg/clients"
+	"xbar/pkg/xbar"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -255,11 +255,11 @@ func TestPRService_Run(t *testing.T) {
 
 			configMgr := &MockConfigManager{Config: tt.config}
 			renderer := NewRendererAdapter(
-				xbar_utils.WithCmdPrintFn(func(a ...any) (int, error) {
+				xbar.WithCmdPrintFn(func(a ...any) (int, error) {
 					outText += fmt.Sprint(a...)
 					return 0, nil
 				}),
-				xbar_utils.WithCmdPrintLnFn(func(a ...any) (int, error) {
+				xbar.WithCmdPrintLnFn(func(a ...any) (int, error) {
 					outText += fmt.Sprint(append(a, "\n")...)
 					return 0, nil
 				}),
