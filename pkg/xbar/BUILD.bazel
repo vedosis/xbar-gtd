@@ -1,0 +1,21 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "xbar",
+    srcs = [
+        "lines.go",
+        "osascript.go",
+        "renderer.go",
+    ],
+    importpath = "xbar/pkg/xbar",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/utils"],
+)
+
+go_test(
+    name = "xbar_test",
+    size = "small",
+    srcs = ["renderer_test.go"],
+    embed = [":xbar"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

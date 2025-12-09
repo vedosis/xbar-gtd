@@ -1,0 +1,36 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "prs",
+    srcs = [
+        "adapters.go",
+        "icons.go",
+        "main.go",
+        "renderer.go",
+        "service.go",
+        "types.go",
+    ],
+    importpath = "xbar/plugins/prs",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/clients",
+        "//pkg/utils",
+        "//pkg/xbar",
+    ],
+)
+
+go_test(
+    name = "prs_test",
+    size = "small",
+    srcs = [
+        "main_test.go",
+        "service_test.go",
+    ],
+    embed = [":prs"],
+    deps = [
+        "//pkg/clients",
+        "//pkg/xbar",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
+    ],
+)

@@ -1,0 +1,23 @@
+load("@gazelle//:def.bzl", "gazelle", "gazelle_test")
+
+# gazelle:prefix xbar
+gazelle(
+    name = "gazelle",
+    visibility = ["//tools:__pkg__"],
+)
+
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=deps.bzl%go_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+)
+
+# The UX on this test sucks. If this fails, use `bazel run //:gazelle` to fix.
+gazelle_test(
+    name = "gazelle_test",
+    workspace = "//:BUILD.bazel",
+)

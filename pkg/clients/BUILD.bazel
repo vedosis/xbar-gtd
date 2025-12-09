@@ -1,0 +1,29 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "clients",
+    srcs = [
+        "gh_cli.go",
+        "github.go",
+    ],
+    embedsrcs = ["github.prs.graphql"],
+    importpath = "xbar/pkg/clients",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/utils"],
+)
+
+go_test(
+    name = "clients_test",
+    size = "small",
+    srcs = [
+        "gh_cli_test.go",
+        "github_test.go",
+    ],
+    data = glob(["testdata/**"]),
+    embed = [":clients"],
+    deps = [
+        "//pkg/utils",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
+    ],
+)

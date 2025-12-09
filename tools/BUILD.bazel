@@ -1,0 +1,12 @@
+exports_files([
+    "install-hooks.sh",
+    "pre-commit.sh",
+    "test-pwd.sh",
+])
+
+sh_binary(
+    name="install-git-hooks",
+    srcs=["install-hooks.sh"],
+    data=["pre-commit.sh"],
+    visibility = ["//visibility:public"],
+)

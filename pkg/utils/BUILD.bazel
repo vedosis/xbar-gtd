@@ -1,0 +1,31 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "utils",
+    srcs = [
+        "bin_path.go",
+        "configs.go",
+        "dark_mode.go",
+        "paragraph.go",
+        "testing.go",
+    ],
+    importpath = "xbar/pkg/utils",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_stretchr_testify//require",
+        "@in_gopkg_yaml_v3//:yaml_v3",
+    ],
+)
+
+go_test(
+    name = "utils_test",
+    size = "small",
+    srcs = [
+        "bin_path_test.go",
+        "configs_test.go",
+        "dark_mode_test.go",
+        "paragraph_test.go",
+    ],
+    embed = [":utils"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)
